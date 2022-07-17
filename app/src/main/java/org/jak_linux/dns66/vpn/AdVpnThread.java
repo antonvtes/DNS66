@@ -80,6 +80,10 @@ class AdVpnThread implements Runnable, DnsPacketProxy.EventLoop {
     private Thread thread = null;
     private FileDescriptor mBlockFd = null;
     private FileDescriptor mInterruptFd = null;
+
+    Set<String> allowOnVpn = new HashSet<>();
+    Set<String> doNotAllowOnVpn = new HashSet<>();
+
     /**
      * Number of iterations since we last cleared the pcap4j cache
      */
@@ -388,9 +392,6 @@ class AdVpnThread implements Runnable, DnsPacketProxy.EventLoop {
     }
 
     void configurePackages(VpnService.Builder builder, Configuration config) {
-        Set<String> allowOnVpn = new HashSet<>();
-        Set<String> doNotAllowOnVpn = new HashSet<>();
-
         config.allowlist.resolve(vpnService.getPackageManager(), allowOnVpn, doNotAllowOnVpn);
 
         if (config.allowlist.defaultMode == Configuration.Allowlist.DEFAULT_MODE_NOT_ON_VPN) {
